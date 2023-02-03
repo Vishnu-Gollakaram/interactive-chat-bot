@@ -52,7 +52,13 @@ def generate_code(language, user_message):
     data = cursor.fetchall()
     data = pd.DataFrame(data, columns=["language", "code"])
     if data["code"].empty:
-        return "No code found for this language."
+        code = request.form.get("code")
+        if code:
+            cursor.execute("INSERT INTO codes (language, code) VALUES (?, ?)", (language, code))
+            conn.commit()
+            return code
+        else:
+            return "No code found for this language."
     else:
         tfidf = TfidfVectorizer().fit_transform(data["code"])
         knn = NearestNeighbors(n_neighbors=1).fit(tfidf)
