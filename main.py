@@ -60,6 +60,7 @@ def generate_code(language, user_message):
         else:
             return "No code found for this language."
     else:
+        print("Hey")
         tfidf = TfidfVectorizer().fit_transform(data["code"])
         knn = NearestNeighbors(n_neighbors=1).fit(tfidf)
         user_message_vector = TfidfVectorizer().fit_transform([user_message])
